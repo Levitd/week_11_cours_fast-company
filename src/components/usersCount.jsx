@@ -23,5 +23,5 @@ export const UserCount = (number) =>{
         answer=`${number} ${piple} ${action} ${ending}`
     }
 
-    return <><h2><div className={'badge bg-xl bg-'+styleAnswer}>{answer}</div></h2></>
+    return <><h2><div className={'badge bg-'+styleAnswer}>{answer}</div></h2></>
 }

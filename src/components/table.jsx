@@ -46,13 +46,15 @@ const rowsTable = (() => {
     </>
   )
 })
-
 return (
     <>
+    {usersArray.length>0 && (
       <table className="table">
         <thead><tr>{headTable()}</tr></thead>
         <tbody>{rowsTable()}</tbody>
       </table>
+      )
+    }
     </>
   );
 };

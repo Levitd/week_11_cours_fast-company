@@ -9,7 +9,6 @@ const Table = (usersArray, setUsers ) => {
 
   const handleDeleteUser = (idUser)=>{
     setUsers((prevState) => prevState.filter((el) => el._id !== idUser));
-    console.log(idUser);
   }
   
   const rowTable =(elRow) =>{

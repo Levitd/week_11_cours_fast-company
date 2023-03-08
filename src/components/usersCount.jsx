@@ -14,15 +14,12 @@ export const UserCount = (number) =>{
         if (number===1 || (number>20 && number%10===1)){
             piple =`человек`
             action = `тусанёт`
-            console.log(1, lastOne);
         } else if([2,3,4].indexOf(lastOne)>=0 && !(number>4 && number<15)){ //|| (number>20 && (number%10===2 || number%10===3 || number%10===4))
             piple =`человека`
             action = `тусанут`
-            console.log(2, lastOne);
         } else { 
             piple =`человек`
             action = `тусанёт`
-            console.log(3, lastOne);
         }
         answer=`${number} ${piple} ${action} ${ending}`
     }

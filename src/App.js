@@ -7,10 +7,16 @@ function App() {
     const [users, setUsers] = useState(api.users.fetchAll());
 
     const handleBookMarkUser = (idUser) => {
-        const findIdx = users.findIndex((el) => el._id === idUser);
-        const bookMark = users[findIdx]['bookmark'];
-        users[findIdx]['bookmark'] = (bookMark === true) ? false : true;
-        const newUsers = users.concat(); //по прежнему не понимаю, как обновить, не создавая новый массив :(
+        // const findIdx = users.findIndex((el) => el._id === idUser);
+        // const bookMark = users[findIdx]['bookmark'];
+        // users[findIdx]['bookmark'] = (bookMark === true) ? false : true;
+        const newUsers = users.map((user) => {
+            if (user._id === idUser) {
+                return { ...user, bookmark: !user.bookmark };
+            } else {
+                return user;
+            }
+        });
         setUsers(newUsers);
     }
     const handleDeleteUser = (idUser) => {

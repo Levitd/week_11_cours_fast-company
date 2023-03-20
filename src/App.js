@@ -18,23 +18,26 @@ function App() {
             }
         });
         setUsers(newUsers);
-    }
+    };
     const handleDeleteUser = (idUser) => {
         setUsers((prevState) => prevState.filter((el) => el._id !== idUser));
-    }
+    };
 
+    const renderUsers = (
+        <Users
+            usersArray={users}
+            setFunction={setUsers}
+            OnBookMark={handleBookMarkUser}
+            OnDeleteUser={handleDeleteUser}
+        />
+    );
+    const renderPhrase = <SearchStatus number={users.length} />;
 
-    const renderUsers = <Users
-        usersArray={users}
-        setFunction={setUsers}
-        OnBookMark={handleBookMarkUser}
-        OnDeleteUser={handleDeleteUser}
-    />;
-    const renderPhrase = <SearchStatus
-        number={users.length} />;
-
-    return <>{renderPhrase} {renderUsers}</>;
-
+    return (
+        <>
+            {renderPhrase} {renderUsers}
+        </>
+    );
 }
 
 export default App;

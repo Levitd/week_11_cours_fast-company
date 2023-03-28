@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { headColum as headColumArray } from "../api/columsTable";
 import Qualitie from "./qualitie";
 import BookMark from "./bookmark";
 import Pagination from "./pagination";
 import { paginate } from "../api/utils/paginate";
 import PropTypes from "prop-types";
+import api from "../api";
+import GroupList from "./groupList";
+import { SearchStatus } from "./searchStatus";
 
 const Users = (props) => {
     const headTable = () =>
@@ -13,6 +16,8 @@ const Users = (props) => {
                 {el}
             </th>
         ));
+    const [professions, setProfession] = useState(); // api.professions.fetchAll()
+    const [selectedProf, setSelectedProf] = useState();
 
     const qualities = (qlt) => qlt.map((elq) => Qualitie(elq));
 
@@ -57,41 +62,79 @@ const Users = (props) => {
             </>
         );
     };
-    const count = props.usersArray.length;
     const users = props.usersArray;
 
-    const pageSize = 4;
+    const handleProfessionSelect = item => {
+        setSelectedProf(item);
+    };
+
+    const pageSize = 2;
     const [curentPage, setCurentPage] = useState(1);
     const handlePageChange = (pageIndex) => {
         setCurentPage(pageIndex);
     };
 
-    const userGroup = paginate(users, curentPage, pageSize);
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => setProfession(data));
+    }, []);
+
+    useEffect(() => {
+        setCurentPage(1);
+    }, [selectedProf]);
+
+    const filteredUsers = selectedProf ? users.filter((user) => user.profession._id === selectedProf._id) : users;
+    const count = filteredUsers?.length ?? 0;
+
+    const userGroup = paginate(filteredUsers, curentPage, pageSize);
+
+    const clearFilter = () => {
+        setSelectedProf();
+    };
     return (
-        <>
+        <div className="d-flex">
+
+            <div className="div d-flex flex-column flex-shrink-0 p-3">
+
+                {professions && (
+                    <>
+                        <GroupList
+                            selectedItem={selectedProf}
+                            items={professions}
+                            onItemSelect={handleProfessionSelect}
+                        />
+                        <button className="btn btn-secondary mt-2" onClick={clearFilter}>Очистить</button>
+                    </>
+                )}
+            </div>
             {count > 0 && (
                 <>
-                    <table className="table">
-                        <thead>
-                            <tr>{headTable()}</tr>
-                        </thead>
-                        <tbody>{rowsTable(userGroup)}</tbody>
-                    </table>
-                    <Pagination
-                        itemsCount={count}
-                        pageSize={pageSize}
-                        curentPage={curentPage}
-                        onPageChange={handlePageChange}
-                    />
+
+                    <div className="d-flex flex-column">
+                        <SearchStatus number={count} />
+                        <table className="table">
+                            <thead>
+                                <tr>{headTable()}</tr>
+                            </thead>
+                            <tbody>{rowsTable(userGroup)}</tbody>
+                        </table>
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                itemsCount={count}
+                                pageSize={pageSize}
+                                curentPage={curentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
+                    </div>
                 </>
             )}
-        </>
+        </div>
     );
 };
 Users.propTypes = {
     OnBookMark: PropTypes.func.isRequired,
     OnDeleteUser: PropTypes.func.isRequired,
-    usersArray: PropTypes.array.isRequired
+    usersArray: PropTypes.array
 };
 
 export default Users;

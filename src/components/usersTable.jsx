@@ -10,7 +10,7 @@ const UserTable = (props) => {
     const { filteredUsers, OnDeleteUser, OnBookMark, OnSort, selectedSort } = props;
 
     const columns = {
-        name: { path: "name", name: "Имя" },
+        name: { path: "name", name: "Имя", link: "user", paramLink: "_id" },
         qualities: { name: "Качества", component: (user) => (<QualitiesList qualities={user.qualities} />) },
         professions: { name: "Профессия", path: "profession.name" },
         completedMeetings: { name: "Встретился, раз", path: "completedMeetings" },

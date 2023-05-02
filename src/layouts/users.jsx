@@ -7,6 +7,7 @@ import { SearchStatus } from "../components/searchStatus";
 import UserTable from "../components/usersTable";
 import { paginate } from "../api/utils/paginate";
 import _ from "lodash";
+import SearchUser from "../components/searchUser";
 
 const Users = () => {
     const [users, setUsers] = useState([]); // api.users.fetchAll()
@@ -32,9 +33,13 @@ const Users = () => {
     const [professions, setProfession] = useState([]); // api.professions.fetchAll()
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [dataSearch, setDataSerch] = useState({ searchUser: "" });
 
     const handleProfessionSelect = item => {
         setSelectedProf(item);
+        if (dataSearch.searchUser.length > 0) {
+            setDataSerch({ searchUser: "" });
+        }
     };
     const handleSort = (item) => {
         setSortBy(item);
@@ -54,8 +59,33 @@ const Users = () => {
         setCurentPage(1);
     }, [selectedProf]);
 
+    const handleChangeSearch = ({ target }) => {
+        setDataSerch((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+    };
+
+    const findUser = () => {
+        if (dataSearch.searchUser.length > 0 && selectedProf) {
+            clearFilter();
+        }
+    };
+    useEffect(() => { findUser(); }, [dataSearch]);
+
+    const clearFilter = () => {
+        setSelectedProf();
+    };
+
     if (professions.length > 0) {
-        const filteredUsers = selectedProf ? users.filter((user) => user.profession._id === selectedProf._id) : users;
+        let filteredUsers;
+        if (selectedProf) {
+            filteredUsers = users.filter((user) => user.profession._id === selectedProf._id);
+        } else if (dataSearch.searchUser.length > 0) {
+            filteredUsers = users.filter((user) => user.name.toLowerCase().indexOf(dataSearch.searchUser.toLowerCase()) > -1);
+        } else {
+            filteredUsers = users;
+        };
         const count = filteredUsers?.length ?? 0;
 
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
@@ -66,9 +96,6 @@ const Users = () => {
 
         const userGroup = paginate(sortedUsers, curentPage, pageSize);
 
-        const clearFilter = () => {
-            setSelectedProf();
-        };
         return (
             <div className="d-flex">
 
@@ -87,6 +114,7 @@ const Users = () => {
                 </div>
                 <div className="d-flex flex-column">
                     <SearchStatus number={count} />
+                    <SearchUser dataSearch={dataSearch} handleChangeSearch={handleChangeSearch} />
                     {count > 0 && (
                         <>
                             <UserTable filteredUsers={userGroup}

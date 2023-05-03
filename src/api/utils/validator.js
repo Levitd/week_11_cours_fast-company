@@ -4,7 +4,11 @@ export function validator(data, config) {
         // Поменял switch на if - eslint ругается на неправильное кол-во пробелов, пока не смог его правильно считать пробелы для switch
         let statusValidate;
         if (validateMethod === "isRequired") {
-            statusValidate = data.trim() === "";
+            if (typeof data === "boolean") {
+                statusValidate = !data;
+            } else {
+                statusValidate = data.trim() === "";
+            }
         } else if (validateMethod === "isEmail") {
             const emailRegExp = /^\S+@\S+\.\S+$/g;
             statusValidate = !emailRegExp.test(data);

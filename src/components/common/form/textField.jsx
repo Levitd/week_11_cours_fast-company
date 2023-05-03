@@ -3,13 +3,18 @@ import PropTypes from "prop-types";
 
 const TextField = ({ label, type, name, value, onChange, error, noValid, noLable, placeholder }) => {
     const [showPassword, setShowPassword] = useState(false);
+
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
+
     const getInputClasses = () => {
         return "form-control" + ((noValid) ? "" : (error) ? " is-invalid" : " is-valid");
     };
     const togleShowPassword = () => {
         setShowPassword((prevState) => !prevState);
     };
-    return (<div className="mb-4  ">
+    return (<div className="mb-4 ">
         {!noLable ? <label htmlFor={name}>{label}</label> : ""}
 
         <div className="input-group has-validation">
@@ -19,7 +24,7 @@ const TextField = ({ label, type, name, value, onChange, error, noValid, noLable
                 name={name}
                 value={value}
                 placeholder={placeholder}
-                onChange={onChange}
+                onChange={handleChange}
                 className={getInputClasses()}
             />
             {type === "password" &&

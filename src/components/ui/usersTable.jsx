@@ -1,17 +1,18 @@
 import React from "react";
-import BookMark from "./bookmark";
+import BookMark from "../common/bookmark";
 import PropTypes from "prop-types";
-import QualitiesList from "./qualitiesList";
-import Table from "./table";
-import TableHeader from "./tableHeader";
-import TableBody from "./tableBody";
+import Qualities from "./qualities";
+import Table, { TableBody, TableHeader } from "../common/table";
+// import Table from "../common/table/table";
+// import TableHeader from "../common/table/tableHeader";
+// import TableBody from "../common/table/tableBody";
 
 const UserTable = (props) => {
     const { filteredUsers, OnDeleteUser, OnBookMark, OnSort, selectedSort } = props;
 
     const columns = {
         name: { path: "name", name: "Имя", link: "user", paramLink: "_id" },
-        qualities: { name: "Качества", component: (user) => (<QualitiesList qualities={user.qualities} />) },
+        qualities: { name: "Качества", component: (user) => (<Qualities qualities={user.qualities} />) },
         professions: { name: "Профессия", path: "profession.name" },
         completedMeetings: { name: "Встретился, раз", path: "completedMeetings" },
         rate: { name: "Оценка", path: "rate" },

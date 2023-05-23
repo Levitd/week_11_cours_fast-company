@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import api from "../../../api";
-import { validator } from "../../../api/utils/validator";
+import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
+import BackHistoryButton from "../../common/backButton";
 
 const UserEditPage = () => {
     const params = useParams();
@@ -113,6 +114,7 @@ const UserEditPage = () => {
     if (user && professions && qualities) {
         return (
             <div className="conteiner shadow">
+                <BackHistoryButton />
                 <div className="row">
                     <div className="col-md-6 offset-md-3 p-4 shadow">
                         <form onSubmit={handleSubmit}>

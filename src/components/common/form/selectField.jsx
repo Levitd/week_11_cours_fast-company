@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SelectField = ({ label, value, onChange, defaultOption, options, error, name }) => {
+const SelectField = ({ label, value, onChange, defaultOption, options, error, name, noValidDefaul }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
     };
 
     const getInputClasses = () => {
-        return "form-select" + (error ? " is-invalid" : " is-valid");
+        return "form-select" + (error ? " is-invalid" : (noValidDefaul ? "" : " is-valid"));
     };
 
     const optionsArray = !Array.isArray(options) && typeof options === "object"
@@ -48,7 +48,8 @@ SelectField.propTypes = {
     onChange: PropTypes.func,
     error: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    name: PropTypes.string
+    name: PropTypes.string,
+    noValidDefaul: PropTypes.bool
 };
 
 export default SelectField;

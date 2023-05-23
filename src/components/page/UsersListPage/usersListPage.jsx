@@ -5,7 +5,7 @@ import api from "../../../api";
 import GroupList from "../../common/groupList";
 import { SearchStatus } from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
-import { paginate } from "../../../api/utils/paginate";
+import { paginate } from "../../../utils/paginate";
 import _ from "lodash";
 import SearchUser from "../../searchUser";
 

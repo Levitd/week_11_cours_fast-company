@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
-import api from "../../../api";
+// import api from "../../../api";
 import GroupList from "../../common/groupList";
 import { SearchStatus } from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import { paginate } from "../../../utils/paginate";
 import _ from "lodash";
 import SearchUser from "../../searchUser";
+import { useUser } from "../../../hooks/useUsers";
+import { useProfessions } from "../../../hooks/useProfession";
 
 const UsersListPage = () => {
-    const [users, setUsers] = useState([]); // api.users.fetchAll()
+    // const [users, setUsers] = useState([]); // api.users.fetchAll()
+    const { users } = useUser();
+    const { professions } = useProfessions(); // api.professions.fetchAll()
+    // console.log(users);
 
-    useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
-    }, []);
+    // useEffect(() => {
+    //     api.users.fetchAll().then((data) => setUsers(data));
+    // }, []);
 
     const handleBookMarkUser = (idUser) => {
         const newUsers = users.map((user) => {
@@ -24,13 +29,15 @@ const UsersListPage = () => {
                 return user;
             }
         });
-        setUsers(newUsers);
+        // setUsers(newUsers);
+        console.log(newUsers);
     };
     const handleDeleteUser = (idUser) => {
-        setUsers((prevState) => prevState.filter((el) => el._id !== idUser));
+        // setUsers((prevState) => prevState.filter((el) => el._id !== idUser));
+        console.log(idUser);
     };
 
-    const [professions, setProfession] = useState([]); // api.professions.fetchAll()
+    // const [professions, setProfession] = useState([]); // api.professions.fetchAll()
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const [dataSearch, setDataSerch] = useState({ searchUser: "" });
@@ -51,14 +58,14 @@ const UsersListPage = () => {
         setCurentPage(pageIndex);
     };
 
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfession(Object.keys(data).map((prof) => (
-            {
-                _id: data[prof]._id,
-                name: data[prof].name
-            }
-        ))));
-    }, []);
+    // useEffect(() => {
+    //     api.professions.fetchAll().then((data) => setProfession(Object.keys(data).map((prof) => (
+    //         {
+    //             _id: data[prof]._id,
+    //             name: data[prof].name
+    //         }
+    //     ))));
+    // }, []);
 
     useEffect(() => {
         setCurentPage(1);

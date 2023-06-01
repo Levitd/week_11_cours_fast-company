@@ -12,14 +12,8 @@ import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
 
 const UsersListPage = () => {
-    // const [users, setUsers] = useState([]); // api.users.fetchAll()
     const { users } = useUser();
-    const { professions } = useProfessions(); // api.professions.fetchAll()
-    // console.log(users);
-
-    // useEffect(() => {
-    //     api.users.fetchAll().then((data) => setUsers(data));
-    // }, []);
+    const { professions } = useProfessions();
 
     const handleBookMarkUser = (idUser) => {
         const newUsers = users.map((user) => {
@@ -37,7 +31,6 @@ const UsersListPage = () => {
         console.log(idUser);
     };
 
-    // const [professions, setProfession] = useState([]); // api.professions.fetchAll()
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const [dataSearch, setDataSerch] = useState({ searchUser: "" });
@@ -57,15 +50,6 @@ const UsersListPage = () => {
     const handlePageChange = (pageIndex) => {
         setCurentPage(pageIndex);
     };
-
-    // useEffect(() => {
-    //     api.professions.fetchAll().then((data) => setProfession(Object.keys(data).map((prof) => (
-    //         {
-    //             _id: data[prof]._id,
-    //             name: data[prof].name
-    //         }
-    //     ))));
-    // }, []);
 
     useEffect(() => {
         setCurentPage(1);

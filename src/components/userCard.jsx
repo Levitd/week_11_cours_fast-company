@@ -2,14 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-// import QualitiesList from "./ui/qualities/qualitiesList";
-
 const UserCard = ({ user }) => {
     const history = useHistory();
-    // const handleAllUsers = () => {
-    //     history.push("/users");
-    // };
-
     const handleClick = () => {
         history.push(`/user/${user._id}/edit`);
     };

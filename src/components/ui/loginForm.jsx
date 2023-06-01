@@ -8,6 +8,7 @@ const LoginForm = () => {
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
 
+    // Оставил как пример использования yup
     // const validateScheme = yup.object().shape({
     //     password: yup.string().required("Пароль обязателен для заполнения").matches(/^(?=.*[A-Z])/, "Пароль должен содержать хотя бы 1 заглавную букву")
     //         .matches(/(?=.*[0-9])/, "Пароль должен содержать хотя бы 1 цифру")

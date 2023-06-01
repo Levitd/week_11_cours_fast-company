@@ -15,7 +15,6 @@ const QualitiesCard = ({ data }) => {
                     </p>
                 </div>
             </div>
-            {/* <h4>Встретился, раз: {user.completedMeetings}</h4> */}
         </>
     );
 };

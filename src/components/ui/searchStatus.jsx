@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export const SearchStatus = (props) => {
-    // number
     let answer, styleAnswer;
     const number = props.number;
     if (number === 0) {
@@ -21,7 +20,6 @@ export const SearchStatus = (props) => {
             [2, 3, 4].indexOf(lastOne) >= 0 &&
             !(number > 4 && number < 15)
         ) {
-            // || (number>20 && (number%10===2 || number%10===3 || number%10===4))
             piple = `человека`;
             action = `тусанут`;
         } else {

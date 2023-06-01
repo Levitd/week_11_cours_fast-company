@@ -4,9 +4,6 @@ import PropTypes from "prop-types";
 import Qualities from "./qualities";
 import Table, { TableBody, TableHeader } from "../common/table";
 import Profession from "./profession";
-// import Table from "../common/table/table";
-// import TableHeader from "../common/table/tableHeader";
-// import TableBody from "../common/table/tableBody";
 
 const UserTable = (props) => {
     const { filteredUsers, OnDeleteUser, OnBookMark, OnSort, selectedSort } = props;

@@ -70,9 +70,6 @@ const UserEditPage = () => {
             },
             min: { message: "Имя должно быть не менее 2 символов", value: 2 }
         }
-        // profession: {
-        //     isRequired: { message: "Обязательно выберите вашу профессию" }
-        // }
     };
 
     useEffect(() => { validate(); }, [data]);
@@ -89,25 +86,19 @@ const UserEditPage = () => {
 
         const isValid = validate();
         if (!isValid) return;
-        // console.log(data);
-        // найдем цвет и из массива в объект qualities
         const quialArray = [];
         data.qualities.forEach(el => {
-            // console.log(el);
-            // console.log(qualities);
             const oneQual = Object.values(qualities).filter((qlts) => qlts._id === el.value);
             quialArray.push({ name: el.label, _id: el.value, color: oneQual[0].color });
         });
 
         const profArr = Object.values(professions).filter((prof) => prof._id === data.profession);
         const profObj = { _id: profArr[0]._id, name: profArr[0].name };
-        // console.log(quialArray, profArr);
         const mewData = {
             ...data,
             qualities: quialArray,
             profession: profObj
         };
-        // console.log(mewData);
         api.users.update(id, mewData);
         history.push("/user/" + id);
     };

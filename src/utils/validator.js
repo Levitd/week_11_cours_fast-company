@@ -19,7 +19,7 @@ export function validator(data, config) {
             const digitRegExp = /\d/g;
             statusValidate = !digitRegExp.test(data);
         } else if (validateMethod === "min") {
-            statusValidate = data.length <= config.value;
+            statusValidate = !(data.length >= config.value);
         };
         if (statusValidate) return config.message;
     };

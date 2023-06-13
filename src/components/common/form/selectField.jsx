@@ -10,12 +10,18 @@ const SelectField = ({ label, value, onChange, defaultOption, options, error, na
         return "form-select" + (error ? " is-invalid" : (noValidDefaul ? "" : " is-valid"));
     };
 
-    const optionsArray = !Array.isArray(options) && typeof options === "object"
-        ? Object.keys(options).map(optionName => (
-            { name: options[optionName].name, value: options[optionName]._id }
-        ))
-        : options;
-
+    // const optionsArray = !Array.isArray(options) && typeof options === "object"
+    //     ? Object.keys(options).map(optionName => (
+    //         { name: options[optionName].name, value: options[optionName]._id }
+    //     ))
+    //     : options.map(optionName => (
+    //         { name: optionName.name, value: optionName._id }
+    //     ));
+    const optionsArray =
+        !Array.isArray(options) && typeof options === "object"
+            ? Object.values(options)
+            : options;
+    // console.log(optionsArray, typeof options, !Array.isArray(options));
     return (
         <div className="mb-4 ">
             <label htmlFor={name} className="form-label">{label}</label>
@@ -27,11 +33,11 @@ const SelectField = ({ label, value, onChange, defaultOption, options, error, na
                 onChange={handleChange}
             >
                 <option disabled value="">{defaultOption}</option>
-                {optionsArray && optionsArray.map(option =>
+                {optionsArray && optionsArray.map((option) =>
                     <option
                         key={option.value}
                         value={option.value}>
-                        {option.name}
+                        {option.label}
                     </option>)}
             </select>
             {error && <div className="invalid-feedback">

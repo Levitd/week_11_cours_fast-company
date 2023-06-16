@@ -10,6 +10,7 @@ const LoginForm = () => {
     // console.log(process.env);
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
+    const [enrerError, setEnterError] = useState(null);
     const { signIn } = useAuth();
     const history = useHistory();
 
@@ -27,6 +28,7 @@ const LoginForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
+        setEnterError(null);
     };
     const validatorConfig = {
         email: {
@@ -56,6 +58,7 @@ const LoginForm = () => {
         return Object.keys(errors).length === 0;
     };
     const isValid = Object.keys(errors).length === 0;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -65,7 +68,12 @@ const LoginForm = () => {
             await signIn(data);
             history.push("/");
         } catch (error) {
-            setErrors(error);
+            if (error.message) {
+                setEnterError(error.message);
+            } else {
+                setErrors(error);
+            }
+            // console.log(error);
         }
     };
     return (<>
@@ -92,8 +100,8 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
-
-            <button type="submit" disabled={!isValid} className="btn btn-primary w-100 mx-auto">Войти</button>
+            {enrerError && <p className="text-danger">{enrerError}</p>}
+            <button type="submit" disabled={!isValid || enrerError} className="btn btn-primary w-100 mx-auto">Войти</button>
         </form>
     </>
     );

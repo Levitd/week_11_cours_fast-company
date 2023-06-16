@@ -5,7 +5,10 @@ import { toast } from "react-toastify";
 import userService from "../../src/services/user.service";
 import { setTokens } from "../services/localStorage.service";
 
-const httpAuth = axios.create();
+const httpAuth = axios.create({
+    baseURL: "https://identitytoolkit.googleapis.com/v1/",
+    params: { key: process.env.REACT_APP_FIREBASE_KEY }
+});
 const AuthContext = React.createContext();
 
 export const useAuth = () => {
@@ -16,7 +19,7 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState({});
 
     async function signUp({ email, password, ...rest }) {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+        const url = `accounts:signUp`;
 
         try {
             const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
@@ -34,7 +37,7 @@ const AuthProvider = ({ children }) => {
         }
     };
     async function signIn({ email, password, ...rest }) {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+        const url = `accounts:signInWithPassword`;
 
         try {
             const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
@@ -49,6 +52,8 @@ const AuthProvider = ({ children }) => {
                 } else if (message === "INVALID_PASSWORD") {
                     const errorObject = { password: "Пароль введен не правильно" };
                     throw errorObject;
+                } else { // if (message === "TOO_MANY_ATTEMPTS_TRY_LATER")
+                    throw new Error("Слишком много попыток входа, попробуйте позже...");
                 }
             }
         }

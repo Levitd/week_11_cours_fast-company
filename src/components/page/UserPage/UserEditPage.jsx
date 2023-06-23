@@ -1,52 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import api from "../../../api";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
+import { useProfessions } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
+import { useQuality } from "../../../hooks/useQuality";
 
 const UserEditPage = () => {
     const params = useParams();
     const { id } = params;
     const history = useHistory();
-    const [data, setData] = useState({
-        email: "",
-        name: "",
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
 
-    const [user, setUser] = useState(0);
-    const [qualities, setQualities] = useState({});
-    const [professions, setProfession] = useState([]);
+    const { currentUser: user } = useAuth();
+    if (user._id !== id) {
+        history.push(`/user/${user._id}/edit`);
+    }
+    const [allLoading, setAllLoading] = useState(false);
+    const [data, setData] = useState({});
+
+    const { isLoading: professionsLoading, professions: profArray } = useProfessions();
+    const { isLoading: qualitiesLoading, qualities: quialArray } = useQuality();
+
     const [errors, setErrors] = useState({});
 
+    const professions = profArray.map((p) => ({ value: p._id, label: p.name }));
+    const qualities = quialArray.map((q) => ({ value: q._id, label: q.name }));
+
     useEffect(() => {
-        api.users.getById(id).then((data) => {
-            setUser(data);
-            setData((prevState) => ({
-                ...prevState,
-                email: data.email,
-                name: data.name,
-                sex: data.sex,
-                qualities: data.qualities.map((qualiti) => ({
-                    label: qualiti.name,
-                    value: qualiti._id
-                })),
-                profession: data.profession._id
-            }));
-        });
-        api.professions.fetchAll().then((data) => {
-            setProfession(data);
-        });
-        api.qualities.fetchAll().then((data) => {
-            setQualities(data);
-        });
-    }, []);
+        let isLabel = false;
+        setData(
+            {
+                ...user,
+                qualities: user.qualities.map((qualiti) => ({
+                    label: (qualities.find((q) => {
+                        if (q.value === qualiti) if (q.label) isLabel = true;
+                        return q.value === qualiti;
+                    }))?.label,
+                    value: qualiti
+                }))
+            });
+        setAllLoading(isLabel);
+    }, [qualitiesLoading, professionsLoading]);
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -81,28 +79,35 @@ const UserEditPage = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (e) => {
+    const { apdateUser } = useAuth();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const isValid = validate();
         if (!isValid) return;
         const quialArray = [];
         data.qualities.forEach(el => {
-            const oneQual = Object.values(qualities).filter((qlts) => qlts._id === el.value);
-            quialArray.push({ name: el.label, _id: el.value, color: oneQual[0].color });
+            // const oneQual = Object.values(qualities).filter((qlts) => qlts._id === el.value);
+            quialArray.push(el.value); // , color: oneQual[0].color
         });
 
-        const profArr = Object.values(professions).filter((prof) => prof._id === data.profession);
-        const profObj = { _id: profArr[0]._id, name: profArr[0].name };
-        const mewData = {
+        // const profArr = Object.values(professions).filter((prof) => prof._id === data.profession);
+        // console.log(profArr);
+        // const profObj = { _id: profArr[0]._id, name: profArr[0].name };
+        const newData = {
             ...data,
             qualities: quialArray,
-            profession: profObj
+            profession: data.profession
         };
-        api.users.update(id, mewData);
+        // console.log(id, newData);
+
+        await apdateUser(newData);
+        // api.users.update(id, mewData);
         history.push("/user/" + id);
     };
-    if (user && professions && qualities) {
+
+    if (user && allLoading) {
         return (
             <div className="conteiner shadow">
                 <BackHistoryButton />

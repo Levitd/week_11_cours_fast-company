@@ -4,12 +4,14 @@ import NavBar from "./components/ui/navBar";
 import { Route, Switch } from "react-router-dom";
 import Main from "./layouts/main";
 import Login from "./layouts/login";
+import LogOut from "./layouts/logOut";
 import UserPages from "./components/page/UserPage";
 import UserProvider from "./hooks/useUsers";
 import { ToastContainer } from "react-toastify";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualitiesProvider } from "./hooks/useQuality";
 import AuthProvider from "./hooks/useAuth";
+import ProtectedRoute from "./components/common/protectedRoute";
 
 function App() {
     return (
@@ -22,9 +24,10 @@ function App() {
                             <Switch>
                                 <Route path="/" exact component={Main} />
                                 <Route path="/login/:type?" component={Login} />
-                                <Route path="/users" exact component={Users} />
-                                <Route path="/user/:id/edit" component={UserPages.UserEditPage} />
-                                <Route path="/user/:id" component={UserPages.UserPage} />
+                                <ProtectedRoute path="/user/:id/edit" component={UserPages.UserEditPage} />
+                                <ProtectedRoute path="/user/:id" component={UserPages.UserPage} />
+                                <ProtectedRoute path="/users" exact component={Users} />
+                                <Route path="/logout" component={LogOut} />
                             </Switch>
                         </QualitiesProvider>
                     </ProfessionProvider>

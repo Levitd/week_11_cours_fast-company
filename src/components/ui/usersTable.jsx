@@ -6,7 +6,7 @@ import Table, { TableBody, TableHeader } from "../common/table";
 import Profession from "./profession";
 
 const UserTable = (props) => {
-    const { filteredUsers, OnDeleteUser, OnBookMark, OnSort, selectedSort } = props;
+    const { filteredUsers, OnBookMark, OnSort, selectedSort } = props;
 
     const columns = {
         name: { path: "name", name: "Имя", link: "user", paramLink: "_id" },
@@ -16,16 +16,6 @@ const UserTable = (props) => {
         rate: { name: "Оценка", path: "rate" },
         bookmark: {
             name: "Избранное", path: "bookmark", component: (user) => (<BookMark status={user.bookmark} onClick={() => OnBookMark(user._id)} />)
-        },
-        delete: {
-            component: (user) => (
-                <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => OnDeleteUser(user._id)}
-                >
-                    delete
-                </button>
-            )
         }
     };
     return (
@@ -38,7 +28,6 @@ const UserTable = (props) => {
 
 UserTable.propTypes = {
     filteredUsers: PropTypes.array.isRequired,
-    OnDeleteUser: PropTypes.func.isRequired,
     OnBookMark: PropTypes.func.isRequired,
     OnSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired

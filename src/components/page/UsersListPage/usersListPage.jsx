@@ -10,10 +10,12 @@ import _ from "lodash";
 import SearchUser from "../../searchUser";
 import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersListPage = () => {
     const { users } = useUser();
-    const { professions } = useProfessions();
+    const { currentUser } = useAuth();
+    const { isLoading: professionsLoading, professions } = useProfessions();
 
     const handleBookMarkUser = (idUser) => {
         const newUsers = users.map((user) => {
@@ -73,15 +75,20 @@ const UsersListPage = () => {
         setSelectedProf();
     };
 
-    if (professions.length > 0) {
-        let filteredUsers;
-        if (selectedProf) {
-            filteredUsers = users.filter((user) => user.profession._id === selectedProf._id);
-        } else if (dataSearch.searchUser.length > 0) {
-            filteredUsers = users.filter((user) => user.name.toLowerCase().indexOf(dataSearch.searchUser.toLowerCase()) > -1);
-        } else {
-            filteredUsers = users;
-        };
+    if (!professionsLoading) {
+        function filterUsers(data) {
+            let filteredUsers;
+            if (selectedProf) {
+                filteredUsers = data.filter((user) => user.profession._id === selectedProf._id);
+            } else if (dataSearch.searchUser.length > 0) {
+                filteredUsers = data.filter((user) => user.name.toLowerCase().indexOf(dataSearch.searchUser.toLowerCase()) > -1);
+            } else {
+                filteredUsers = data;
+            };
+            return filteredUsers.filter((u) => u._id !== currentUser._id);
+        }
+        const filteredUsers = filterUsers(users);
+
         const count = filteredUsers?.length ?? 0;
 
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
@@ -97,7 +104,7 @@ const UsersListPage = () => {
 
                 <div className="div d-flex flex-column flex-shrink-0 p-3">
 
-                    {professions && (
+                    {professions && !professionsLoading && (
                         <>
                             <GroupList
                                 selectedItem={selectedProf}

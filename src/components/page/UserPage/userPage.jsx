@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import api from "../../../api";
+import React from "react";
 import { useParams } from "react-router-dom";
 import UserCard from "../../userCard";
 import QualitiesCard from "../../qualitiesCard";
 import MeetingsCard from "../../meetingsCard";
 import Comments from "../../comments";
+import { useUser } from "../../../hooks/useUsers";
+import { CommentsProvider } from "../../../hooks/useComments";
+import ProfessionCard from "../../professionCard";
 
 const UserPage = () => {
     const params = useParams();
     const { id } = params;
 
-    const [user, setUser] = useState(0);
-    useEffect(() => {
-        api.users.getById(id).then((data) => setUser(data));
-    }, []);
-
+    const { getUserById } = useUser();
+    const user = getUserById(id);
     if (typeof user !== "number" && user !== undefined) {
         return (<>
             <div className="conteiner ms-5">
@@ -22,10 +21,13 @@ const UserPage = () => {
                     <div className="col-md-4 mb-3">
                         <UserCard user={user} />
                         <QualitiesCard data={user.qualities} />
-                        <MeetingsCard value={user.completedMeetings} />
+                        <MeetingsCard value={user.completeMeetings} />
+                        <ProfessionCard value={user.profession} />
                     </div>
                     <div className="col-md-8">
-                        <Comments />
+                        <CommentsProvider>
+                            <Comments />
+                        </CommentsProvider>
                     </div>
                 </div>
             </div>

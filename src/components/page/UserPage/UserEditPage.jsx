@@ -88,22 +88,16 @@ const UserEditPage = () => {
         if (!isValid) return;
         const quialArray = [];
         data.qualities.forEach(el => {
-            // const oneQual = Object.values(qualities).filter((qlts) => qlts._id === el.value);
-            quialArray.push(el.value); // , color: oneQual[0].color
+            quialArray.push(el.value);
         });
 
-        // const profArr = Object.values(professions).filter((prof) => prof._id === data.profession);
-        // console.log(profArr);
-        // const profObj = { _id: profArr[0]._id, name: profArr[0].name };
         const newData = {
             ...data,
             qualities: quialArray,
             profession: data.profession
         };
-        // console.log(id, newData);
 
         await apdateUser(newData);
-        // api.users.update(id, mewData);
         history.push("/user/" + id);
     };
 

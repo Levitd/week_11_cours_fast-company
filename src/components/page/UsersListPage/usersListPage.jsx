@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
-// import api from "../../../api";
 import GroupList from "../../common/groupList";
 import { SearchStatus } from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
@@ -9,14 +8,15 @@ import { paginate } from "../../../utils/paginate";
 import _ from "lodash";
 import SearchUser from "../../searchUser";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getProfessionsLoadingStatus, getProfessions } from "../../../store/professions";
 
 const UsersListPage = () => {
     const { users } = useUser();
     const { currentUser } = useAuth();
-    const { isLoading: professionsLoading, professions } = useProfessions();
-
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const handleBookMarkUser = (idUser) => {
         const newUsers = users.map((user) => {
             if (user._id === idUser) {
@@ -98,7 +98,6 @@ const UsersListPage = () => {
         }
 
         const userGroup = paginate(sortedUsers, curentPage, pageSize);
-
         return (
             <div className="d-flex">
 

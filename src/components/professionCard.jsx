@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useProfessions } from "../hooks/useProfession";
+import { useSelector } from "react-redux";
+import { getProfessionsById } from "../store/professions";
 
 const ProfessionCard = ({ value }) => {
-    const { getProfession } = useProfessions();
-
-    const proffessionName = getProfession(value);
+    const proffessionName = useSelector(getProfessionsById(value));
 
     return (
         <>

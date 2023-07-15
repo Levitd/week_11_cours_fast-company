@@ -7,7 +7,6 @@ import Login from "./layouts/login";
 import LogOut from "./layouts/logOut";
 import UserPages from "./components/page/UserPage";
 import { ToastContainer } from "react-toastify";
-import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
 import AppLoader from "./components/ui/hoc/appLoader";
 
@@ -15,17 +14,15 @@ function App() {
     return (
         <>
             <AppLoader>
-                <AuthProvider>
-                    <NavBar />
-                    <Switch>
-                        <Route path="/" exact component={Main} />
-                        <Route path="/login/:type?" component={Login} />
-                        <ProtectedRoute path="/user/:id/edit" component={UserPages.UserEditPage} />
-                        <ProtectedRoute path="/user/:id" component={UserPages.UserPage} />
-                        <ProtectedRoute path="/users" exact component={Users} />
-                        <Route path="/logout" component={LogOut} />
-                    </Switch>
-                </AuthProvider>
+                <NavBar />
+                <Switch>
+                    <Route path="/" exact component={Main} />
+                    <Route path="/login/:type?" component={Login} />
+                    <ProtectedRoute path="/user/:id/edit" component={UserPages.UserEditPage} />
+                    <ProtectedRoute path="/user/:id" component={UserPages.UserPage} />
+                    <ProtectedRoute path="/users" exact component={Users} />
+                    <Route path="/logout" component={LogOut} />
+                </Switch>
                 <ToastContainer />
             </AppLoader>
         </>

@@ -3,17 +3,18 @@ import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { login } from "../../store/users";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, login } from "../../store/users";
 // import * as yup from "yup";
 
 const LoginForm = () => {
     // console.log(process.env);
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
-    const [enrerError, setEnterError] = useState(null);
+    // const [enrerError, setEnterError] = useState(null);
     const dispatch = useDispatch();
     const history = useHistory();
+    const loginError = useSelector(getAuthErrors());
 
     // Оставил как пример использования yup
     // const validateScheme = yup.object().shape({
@@ -29,7 +30,7 @@ const LoginForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
-        setEnterError(null);
+        // setEnterError(null);
     };
     const validatorConfig = {
         email: {
@@ -95,8 +96,8 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
-            {enrerError && <p className="text-danger">{enrerError}</p>}
-            <button type="submit" disabled={!isValid || enrerError} className="btn btn-primary w-100 mx-auto">Войти</button>
+            {loginError && <p className="text-danger">{loginError}</p>}
+            <button type="submit" disabled={!isValid} className="btn btn-primary w-100 mx-auto">Войти</button>
         </form>
     </>
     );

@@ -7,14 +7,14 @@ import UserTable from "../../ui/usersTable";
 import { paginate } from "../../../utils/paginate";
 import _ from "lodash";
 import SearchUser from "../../searchUser";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessionsLoadingStatus, getProfessions } from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
-    const { users } = useUser();
-    const { currentUser } = useAuth();
+    const users = useSelector(getUsersList());
+
+    const currentUserId = useSelector(getCurrentUserId());
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const handleBookMarkUser = (idUser) => {
@@ -85,7 +85,7 @@ const UsersListPage = () => {
             } else {
                 filteredUsers = data;
             };
-            return filteredUsers.filter((u) => u._id !== currentUser._id);
+            return filteredUsers.filter((u) => u._id !== currentUserId._id);
         }
         const filteredUsers = filterUsers(users);
 

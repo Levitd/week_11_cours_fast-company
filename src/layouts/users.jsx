@@ -1,9 +1,12 @@
 import React from "react";
 import UsersListPage from "../components/page/UsersListPage";
+import UsersLoader from "../components/ui/hoc/usersLoader";
 
 const Users = () => {
     return (
-        <UsersListPage />
+        <UsersLoader>
+            <UsersListPage />
+        </UsersLoader>
     );
 };
 
